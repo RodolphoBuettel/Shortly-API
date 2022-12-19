@@ -12,17 +12,17 @@ export default async function signUpValidation (req, res, next){
     }
 
     if (password !== confirmPassword) {
-        return res.sendStatus(409);
+        return res.sendStatus(401);
     }
 
     const emailExist = await connection.query("SELECT * FROM users WHERE email = $1", [email]);
     if (emailExist.rows[0]) {
-        return res.sendStatus(409);
+        return res.sendStatus(401);
     }
 
     const nameExist = await connection.query("SELECT * FROM users WHERE email = $1", [name]);
     if (nameExist.rows[0]) {
-        return res.sendStatus(409);
+        return res.sendStatus(401);
     }
 
     req.user = req.body;

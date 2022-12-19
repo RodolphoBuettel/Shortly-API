@@ -8,13 +8,13 @@ export default async function signInValidation (req, res, next) {
     WHERE users.email = $1`, [email]);
 
     if(!userExist.rows[0]){
-        res.sendStatus(409);
+       return res.sendStatus(401);
     }
 
     const verifiedPassword = bcrypt.compareSync(password, userExist.rows[0].password);
 
     if(!verifiedPassword){
-        res.sendStatus(409);
+         return res.sendStatus(401);
     }
 
     req.userId = userExist.rows[0].id;
