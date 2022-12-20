@@ -10,4 +10,5 @@ router.get("/urls/:id", listUrlById);
 router.get("/urls/open/:shortUrl", redirectUrl);
 
 router.delete("/urls/:id", deleteUrl);
+
 export default router;
