@@ -10,16 +10,36 @@ export async function listMyUrls(req, res) {
     }
 
     try {
+        let arr = [];
         const userExist = await connection.query(`SELECT "usersId" FROM sessions WHERE "userToken" = $1`, [token]);
         if (!userExist.rows[0]) {
             res.sendStatus(404);
         }
-        const userUrls = await connection.query(`SELECT users.id, users.name,
+        const userCounts = await connection.query(`SELECT users.id, users.name,
          SUM(urls."visitCount") AS "visitCount" FROM users
          JOIN urls ON users.id = urls."userId" 
          WHERE users.id = $1
          GROUP BY users.id`, [userExist.rows[0].usersId]);
-        res.send(userUrls.rows)
+
+        if (!userCounts.rows[0]) {
+            res.sendStatus(404);
+        }
+
+        const { id, name, visitCount } = userCounts.rows[0];
+        const userUrls = await connection.query(`SELECT id, "shortUrl", url, "visitCount"
+        FROM urls WHERE urls."userId" = $1 ORDER BY id`, [userExist.rows[0].usersId]);
+
+        for (let i = 0; i < userUrls.rows.length; i++) {
+            arr.push(userUrls.rows[i]);
+        }
+
+        const myUrls = {
+            id,
+            name,
+            visitCount,
+            shortenedUrls: arr
+        }
+        res.send(myUrls);
     } catch (error) {
         console.log(error.message);
     }

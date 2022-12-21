@@ -11,10 +11,9 @@ export async function signUp(req, res) {
         await connection.query(`INSERT INTO users 
         (name, email, password)
          VALUES ($1, $2, $3)`, [name, email, passwordHash]);
-        res.sendStatus(200);
+        res.sendStatus(201);
     } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
+        console.log(error.message);
     }
 }
 
@@ -30,6 +29,5 @@ export async function signIn(req, res) {
         res.sendStatus(200);
     } catch(error){
         console.log(error);
-        res.sendStatus(409);
     }
 }
