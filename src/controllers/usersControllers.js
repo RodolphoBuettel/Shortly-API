@@ -36,9 +36,10 @@ export async function listMyUrls(req, res) {
         const myUrls = {
             id,
             name,
-            visitCount,
+            visitCount: Number(visitCount),
             shortenedUrls: arr
         }
+        
         res.send(myUrls);
     } catch (error) {
         console.log(error.message);
@@ -52,6 +53,7 @@ export async function ranking(req, res) {
         COALESCE(SUM("visitCount"),0) AS "visitCount" FROM
         users LEFT JOIN urls ON urls."userId" = users.id GROUP BY users.name, users.id
         ORDER BY "visitCount" DESC LIMIT 10`);
+
         res.status(200).send(rank.rows);
     } catch (error) {
         console.log(error.message);

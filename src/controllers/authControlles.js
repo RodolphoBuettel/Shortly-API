@@ -28,6 +28,6 @@ export async function signIn(req, res) {
         VALUES ($1, $2)`, [Number(userId), token]);
         res.sendStatus(200);
     } catch(error){
-        console.log(error);
+        console.log(error.message);
     }
 }

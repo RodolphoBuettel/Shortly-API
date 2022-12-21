@@ -13,7 +13,7 @@ export async function shortenUrl(req, res) {
         res.status(201).send(modelId);
     }
     catch (error) {
-        console.log(error.messega);
+        console.log(error.message);
     }
 }
 
